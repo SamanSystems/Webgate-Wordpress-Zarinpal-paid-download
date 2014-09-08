@@ -645,6 +645,7 @@ EOT;
         $au = $_GET['Authority'];
         $amount = $_SESSION['m-amount'];
         $result = self::get($api,$au,$amount);
+		
 
 
 
@@ -655,8 +656,9 @@ EOT;
 			// find with order id
 			global $wpdb;
 			$table_name = $wpdb->prefix . "pfd_orders";
+			$trans_id = $result->RefID;
 
-			$order = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE order_code = $id_get AND fulfilled = 0",$_POST["trans_id"]) , ARRAY_A, 0);
+			$order = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE order_code = $id_get AND fulfilled = 0",$trans_id) , ARRAY_A, 0);
 
 
 			$wpdb->update( $table_name, array('fulfilled' => 1), array('id' => $order["id"]));
@@ -732,14 +734,14 @@ EOT;
         }
 	}
 
-	public static function send($desc,$api,$amount,$redirect){
+	public static function send($desc,$api,$amount,$redirect,$payer_mail){
 	$client = new SoapClient('https://de.zarinpal.com/pg/services/WebGate/wsdl', array('encoding'=>'UTF-8'));
 	$res = $client->PaymentRequest(
 	array(
 					'MerchantID' 	=> $api ,
 					'Amount' 		=> $amount ,
 					'Description' 	=> $desc ,
-					'Email' 		=> '' ,
+					'Email' 		=> $payer_mail ,
 					'Mobile' 		=> '' ,
 					'CallbackURL' 	=> $redirect
 
@@ -828,7 +830,7 @@ EOT;
 			if(isset($_POST['submit']) && ($_SESSION['captcha'] == $_POST['captcha']) && $_SESSION['captcha'] != ''){
 				$_SESSION['email'] = $_POST['email'];
 				$product_id = get_query_var("checkout");
-	
+				$payer_mail = $_POST['email'];
 				global $wpdb;
 				$table_name = $wpdb->prefix . "pfd_products";
 	
@@ -846,7 +848,7 @@ EOT;
 				$amount = $product["cost"];
 				$_SESSION['m-amount'] = $amount;
 				$redirect = get_option('siteurl') . "/?pfd_action=ipn";
-				$result = self::send($tozih,$api,$amount,$redirect);
+				$result = self::send($tozih,$api,$amount,$redirect,$payer_mail);
 				if($result->Status == 100){
 				
 					$go = "https://www.zarinpal.com/pg/StartPay/$result->Authority";
