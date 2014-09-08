@@ -708,7 +708,7 @@ EOT;
 			$emailtext = get_option('email_message');
 			$emailtext = str_replace("[DOWNLOAD_LINK]",$download_link,$emailtext);
 			$emailtext = str_replace("[PRODUCT_NAME]",$product["name"],$emailtext);
-			$emailtext = str_replace("[TRANSACTION_ID]",$_POST["trans_id"],$emailtext);
+			$emailtext = str_replace("[TRANSACTION_ID]",$trans_id,$emailtext);
 
 			$emailtext = $emailtext . "<br /><br />لينک دانلود شما:<br />" . $download_link;
 
