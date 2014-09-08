@@ -856,6 +856,7 @@ EOT;
 					header("Location: $go");
 				}else{
 					echo "در برقراري ارتباط با درگاه پرداخت Zarinpal مشکلي بوجود آمده است".$result->Status;
+					exit();
 				}
 			}else{
 				self::get_email();
