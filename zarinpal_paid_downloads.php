@@ -657,11 +657,11 @@ EOT;
 			global $wpdb;
 			$table_name = $wpdb->prefix . "pfd_orders";
 			$trans_id = $result->RefID;
-
-			$order = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE order_code = $id_get AND fulfilled = 0",$trans_id) , ARRAY_A, 0);
-
-
+                     	$aut = $_GET['Authority'];
+			$order = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE order_code = '$aut' AND fulfilled = 0",$trans_id) , ARRAY_A, 0);
+			
 			$wpdb->update( $table_name, array('fulfilled' => 1), array('id' => $order["id"]));
+
 
 
 			$table_name = $wpdb->prefix . "pfd_products";
@@ -769,10 +769,10 @@ EOT;
 		echo '<div align="center" dir="rtl" style="font-family:tahoma;font-size:11px;border:1px dotted #c3c3c3; width:60%; line-height:20px;margin-left:20%"><form name="frm1" method="post">
 		<table>
 		<tr>
-			<td>ایمیل: </td><td><input  required type="email" name="email" id="email" value="'.$_POST['email'].'" /> </td>
+			<td>ایمیل: </td><td><input type="email" name="email" id="email" required value="'.$_POST['email'].' " /> </td>
 		</tr>
 		<tr>
-		<td>لطفاً عدد '.$rand.' را وارد کنید:</td><td><input  required type="number" min="10" max="99" name="captcha"/> </td>
+		<td>لطفاً عدد '.$rand.' را وارد کنید:</td><td><input type="number" min="10" max="99" name="captcha" required/> </td>
 		</tr>
 		<tr>
 			<td></td><td><input type="submit" name="submit" value="پرداخت" style="font-family:tahoma"/></td>
@@ -799,7 +799,7 @@ EOT;
 				} else {
 					$table_name = $wpdb->prefix . "pfd_products";
 					$product = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id = %d",$transaction["product_id"]), ARRAY_A, 0);
-
+print_r($product);
 					// get option for days
 					$daysexpire = get_option('expire_links_after');
 					if ($daysexpire == 0) {
@@ -816,13 +816,18 @@ EOT;
 					}
 
 					// force download
+
 					header('Content-disposition: attachment; filename=' . basename($product["file"]));
 					header('Content-Type: application/octet-stream');
 					header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 					header('Expires: 0');
+
+
+
 					$result = wp_remote_get($product["file"]);
+
 					echo $result['body'];
-					die();
+					//die();
 				}
 			}
 		} else {
@@ -852,7 +857,7 @@ EOT;
 				if($result->Status == 100){
 				
 					$go = "https://www.zarinpal.com/pg/StartPay/$result->Authority";
-					$wpdb->insert( $table_name, array('product_id' => $product_id, 'order_code' => $result, 'fulfilled' => 0, 'created_at' => time(), 'cost' => $product["cost"]), array( '%d', '%s', '%d', '%d', '%s') );
+					$wpdb->insert( $table_name, array('product_id' => $product_id, 'order_code' => $result->Authority, 'fulfilled' => 0, 'created_at' => time(), 'cost' => $product["cost"]), array( '%d', '%s', '%d', '%d', '%s') );
 					header("Location: $go");
 				}else{
 					echo "در برقراري ارتباط با درگاه پرداخت Zarinpal مشکلي بوجود آمده است".$result->Status;
