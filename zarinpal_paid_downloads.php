@@ -769,10 +769,10 @@ EOT;
 		echo '<div align="center" dir="rtl" style="font-family:tahoma;font-size:11px;border:1px dotted #c3c3c3; width:60%; line-height:20px;margin-left:20%"><form name="frm1" method="post">
 		<table>
 		<tr>
-			<td>ایمیل: </td><td><input type="text" name="email" id="email" value="'.$_POST['email'].'" /> </td>
+			<td>ایمیل: </td><td><input type="email" name="email" id="email" value="'.$_POST['email'].'" /> </td>
 		</tr>
 		<tr>
-		<td>لطفاً عدد '.$rand.' را وارد کنید:</td><td><input type="text" name="captcha"/> </td>
+		<td>لطفاً عدد '.$rand.' را وارد کنید:</td><td><input type="number" min="10" max="99" name="captcha"/> </td>
 		</tr>
 		<tr>
 			<td></td><td><input type="submit" name="submit" value="پرداخت" style="font-family:tahoma"/></td>
