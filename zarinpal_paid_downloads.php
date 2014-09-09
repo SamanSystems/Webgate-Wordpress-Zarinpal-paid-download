@@ -799,7 +799,6 @@ EOT;
 				} else {
 					$table_name = $wpdb->prefix . "pfd_products";
 					$product = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id = %d",$transaction["product_id"]), ARRAY_A, 0);
-print_r($product);
 					// get option for days
 					$daysexpire = get_option('expire_links_after');
 					if ($daysexpire == 0) {
