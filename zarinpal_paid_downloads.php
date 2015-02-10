@@ -305,7 +305,7 @@ EOT;
 			</tr>
 			<tr valign="top">
 				<th scope="row">قيمت محصول(به ازاي هر بار دانلود)</th>
-				<td><input type="text" name="product_cost" style="width:50px;" value="<?php echo str_replace('"','\"',$product["cost"]); ?>" />ريال</td>
+				<td><input type="text" name="product_cost" style="width:50px;" value="<?php echo str_replace('"','\"',$product["cost"]); ?>" />تومان</td>
 			</tr>
 			<tr valign="top">
 				<th scope="row">&nbsp;</th>
